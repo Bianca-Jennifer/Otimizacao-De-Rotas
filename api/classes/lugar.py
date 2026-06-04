@@ -4,3 +4,6 @@ class Lugar:
         self.latitude = latitude
         self.longitude = longitude
         self.tipo = tipo
+
+    def to_osrm(self):
+        return f"{self.longitude},{self.latitude}"    
