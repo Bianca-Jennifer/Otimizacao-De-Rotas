@@ -1,4 +1,5 @@
 from api.classes.definicao_problema import DefinicaoProblema
+import random
 
 
 class AlgoritmoGenetico:
@@ -399,5 +400,36 @@ class AlgoritmoGenetico:
         fitness = distancia_total + (quantidade_postos * PENALIDADE_POSTO)
         
 
-        return fitness        
+        return fitness      
+
+    def selecao_roleta(self,populacao):
+       
+        epsilon = 1e-9
+
+        # transforma fitness em aptidão (quanto menor fitness, maior peso)
+        aptidoes = [
+            1 / (ind.fitness + epsilon)
+            for ind in populacao
+        ]
+
+        soma_aptidoes = sum(aptidoes)
+
+        # roleta acumulada
+        acumulado = 0
+        probabilidades = []
+
+        for a in aptidoes:
+            acumulado += a / soma_aptidoes
+            probabilidades.append(acumulado)
+
+        print(probabilidades)
+        r = random.random()
+        print(r)
+
+        for i, p in enumerate(probabilidades):
+            if r <= p:
+                return i
+
+        return len(populacao) - 1      
+
 
