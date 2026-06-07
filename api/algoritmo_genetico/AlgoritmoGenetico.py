@@ -1,3 +1,4 @@
+import random
 from api.classes.definicao_problema import DefinicaoProblema
 import random
 
@@ -69,3 +70,19 @@ class AlgoritmoGenetico:
         return len(populacao) - 1      
 
 
+    def obter_melhor_individuo(self, populacao_atual):
+        if not populacao_atual:
+            return None
+        
+        melhor_individuo = populacao_atual[0]
+        
+        for individuo in populacao_atual[1:]:
+            if individuo.fitness < melhor_individuo.fitness:
+                melhor_individuo = individuo
+
+        return melhor_individuo
+    
+    def torneio(self, populacao, tamanho_torneio):
+        participantes = random.sample(populacao, tamanho_torneio)
+        melhor_participante = min(participantes, key=lambda individuo: individuo.fitness)
+        return melhor_participante
