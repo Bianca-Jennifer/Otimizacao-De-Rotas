@@ -15,5 +15,8 @@ class DefinicaoProblema:
     def obter_pontos_obrigatorios(self):
         return 
 
-    def obter_postos(self):
-        return 
+    def obter_indice_inicial_para_postos(self):
+        for cont, lugar in enumerate(self.lugares):
+            if lugar.tipo == "Posto":
+                return cont
+        return len(self.lugares)    
