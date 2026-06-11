@@ -51,11 +51,11 @@
                 </div>
                 <div class="col-md-3">
                     <label for="tamanhoPopulacao" class="form-label">Tamanho da População</label>
-                    <input type="number" class="form-control" id="tamanhoPopulacao" min="4" max="20" required>
+                    <input type="number" class="form-control" id="tamanhoPopulacao" min="4" max="20" placeholder="Ex: 4 a 20" required>
                 </div>
                 <div class="col-md-3">
                     <label for="limiteGeracoes" class="form-label">Limite de Gerações</label>
-                    <input type="number" class="form-control" id="limiteGeracoes" min="10" max="1000" required>
+                    <input type="number" class="form-control" id="limiteGeracoes" min="10" max="1000" placeholder="Ex: 10 a 1000" required>
                 </div>
 
                 <hr class="mt-4">
@@ -71,6 +71,13 @@
             </form>
         </div>
     </div>
+
+    <footer class="bg-light text-center text-muted py-4 mt-5 border-top">
+        <div class="container">
+            <p class="mb-1">Otimização de Rotas - Problema do Caixeiro Viajante (TSP)</p>
+            <small>&copy; 2026 Sistema de Rotas Otimizadas. Todos os direitos reservados.</small>
+        </div>
+    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/api.js"></script>
