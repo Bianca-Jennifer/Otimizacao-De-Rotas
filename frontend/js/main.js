@@ -89,6 +89,38 @@ formularioUpload.addEventListener('submit', async function(evento) {
         blocoResultados.classList.remove('d-none');
         blocoResultados.classList.add('fade-in');
 
+        setTimeout(() => {
+            if (respostaDaApi.coordenadas && respostaDaApi.coordenadas.length > 0) {
+                if (!mapaInstancia) {
+                    mapaInstancia = L.map('mapaLeaflet').setView(respostaDaApi.coordenadas[0], 13);
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '© OpenStreetMap'
+                    }).addTo(mapaInstancia);
+                } else {
+                    if (grupoDeRotas) {
+                        mapaInstancia.removeLayer(grupoDeRotas);
+                    }
+                }
+
+                mapaInstancia.invalidateSize();
+
+                grupoDeRotas = L.featureGroup().addTo(mapaInstancia);
+                
+                L.polyline(respostaDaApi.coordenadas, {
+                    color: '#3b82f6', 
+                    weight: 5,
+                    opacity: 0.8
+                }).addTo(grupoDeRotas);
+
+                respostaDaApi.coordenadas.forEach((coordenada, indice) => {
+                    const nomeDoLocal = respostaDaApi.rota_nomes ? respostaDaApi.rota_nomes[indice] : (indice + 1).toString();
+                    L.marker(coordenada).addTo(grupoDeRotas).bindPopup(`<b>${indice + 1}º</b> - ${nomeDoLocal}`);
+                });
+
+                mapaInstancia.fitBounds(grupoDeRotas.getBounds(), {padding: [30, 30]});
+            }
+        }, 300);
+
     } catch (erro) {
         console.log(erro);
     } finally {
