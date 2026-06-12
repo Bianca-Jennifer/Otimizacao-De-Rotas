@@ -7,6 +7,9 @@
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -109,6 +112,42 @@
                     </div>
 
                 </div>
+
+                <div id="blocoResultados" class="bloco-formulario mt-5 d-none">
+                    <h5 class="fw-bold texto-destaque mb-4">
+                        <i class="bi bi-geo-alt-fill me-2"></i>Resultados Otimizados
+                    </h5>
+                    
+                    <div class="row g-4 mb-4 text-center">
+                        <div class="col-md-6 border-end border-secondary border-opacity-25">
+                            <h3 class="text-white fw-bold mb-0" id="resultadoDistancia">0 km</h3>
+                            <small class="text-muted">Distância da Rota</small>
+                        </div>
+                        <div class="col-md-6">
+                            <h3 class="text-white fw-bold mb-0" id="resultadoCombustivel">0 L</h3>
+                            <small class="text-muted">Consumo Estimado</small>
+                        </div>
+                    </div>
+
+                    <hr class="border-secondary opacity-25 my-4">
+
+                    <div class="row g-4">
+                        <div class="col-md-5">
+                            <h6 class="fw-bold text-white mb-3"><i class="bi bi-list-ol me-2"></i>Rota:</h6>
+                            <ul class="list-group list-group-flush bg-transparent" id="listaCidades" style="max-height: 350px; overflow-y: auto;">
+                                <li class="list-group-item bg-transparent text-white border-secondary border-opacity-25">Aguardando processamento...</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="col-md-7">
+                            <h6 class="fw-bold text-white mb-3"><i class="bi bi-map me-2"></i>Mapa do Percurso:</h6>
+                            <div class="p-2 rounded" style="background: rgba(0, 0, 0, 0.2); border: 1px dashed rgba(255, 255, 255, 0.15);">
+                                <div id="mapaLeaflet" style="height: 350px; width: 100%; border-radius: 8px; z-index: 1;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
         </form>
@@ -119,6 +158,9 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
     <script src="js/api.js"></script>
     <script src="js/main.js"></script>
 </body>
