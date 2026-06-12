@@ -2,7 +2,7 @@ import random
 from api.classes.definicao_problema import DefinicaoProblema
 import random
 from api.classes.individuo import Individuo
-from api.services.rotas_postos import criar_rota_com_postos2
+from api.services.rotas_postos import criar_rota_com_postos3
 from api.classes.lugar import Lugar
 
 
@@ -126,7 +126,7 @@ class AlgoritmoGenetico:
         for individuo in populacao_inicial:
 
             rota_completa, rota_inviavel = (
-                criar_rota_com_postos2(
+                criar_rota_com_postos3(
                     self.definicao_problema,
                     individuo.rota_pontos_obrigatorios
                 )
@@ -268,7 +268,7 @@ class AlgoritmoGenetico:
                 # =================================
 
                 rota_completa, rota_inviavel = (
-                    criar_rota_com_postos2(
+                    criar_rota_com_postos3(
                         self.definicao_problema,
                         filho.rota_pontos_obrigatorios
                     )
