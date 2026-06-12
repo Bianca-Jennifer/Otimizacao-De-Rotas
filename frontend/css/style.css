@@ -1,9 +1,10 @@
 body {
-    background: linear-gradient(135deg, #d3e0ff 0%, #8faeff 50%, #eef2ff 100%);
+    /* Fundo escuro com gradiente azul/roxo noturno */
+    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #020617 100%);
     background-attachment: fixed;
     min-height: 100vh;
     font-family: 'Segoe UI', system-ui, sans-serif;
-    color: #1e293b;
+    color: #e2e8f0; /* Texto principal claro */
 }
 
 .fade-in {
@@ -25,49 +26,58 @@ body {
 }
 
 .texto-destaque {
-    color: #0b225c;
+    color: #93c5fd; /* Azul claro para os títulos se destacarem no escuro */
 }
 
+/* Efeito Liquid Glass Adaptado para Modo Escuro */
 .bloco-formulario {
-    background: rgba(255, 255, 255, 0.45);
+    background: rgba(255, 255, 255, 0.05); /* Transparência muito sutil */
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1); /* Borda branca quase invisível */
     border-radius: 24px;
     padding: 2rem;
-    box-shadow: 0 8px 32px 0 rgba(14, 42, 107, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4); /* Sombra mais escura */
     transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
 }
 
 .bloco-formulario:hover {
     transform: translateY(-4px);
-    background: rgba(255, 255, 255, 0.55);
-    box-shadow: 0 12px 40px 0 rgba(14, 42, 107, 0.15);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.6);
 }
 
+/* Caixas de input e select no modo escuro */
 .form-control, .form-select {
-    background: rgba(255, 255, 255, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.8);
+    background: rgba(0, 0, 0, 0.2); /* Fundo escuro translúcido */
+    border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 12px;
     padding: 0.75rem 1rem;
-    color: #1e293b;
+    color: #f8fafc;
     transition: all 0.3s ease;
 }
 
+/* Correção para as opções do Select não ficarem transparentes e ilegíveis */
+.form-select option {
+    background-color: #1e293b;
+    color: #f8fafc;
+}
+
 .form-control:focus, .form-select:focus {
-    background: rgba(255, 255, 255, 0.9);
-    border-color: #5b8def;
-    box-shadow: 0 0 0 4px rgba(91, 141, 239, 0.2);
-    color: #0b225c;
+    background: rgba(0, 0, 0, 0.4);
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.25);
+    color: #ffffff;
     outline: none;
 }
 
 .form-control::placeholder {
-    color: #64748b;
+    color: #94a3b8;
 }
 
+/* Botões */
 .btn-primario {
-    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
     color: #ffffff;
     border: none;
     border-radius: 14px;
@@ -75,7 +85,7 @@ body {
     letter-spacing: 0.5px;
     padding: 14px 40px;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
 }
 
 .btn-primario:hover {
@@ -89,10 +99,11 @@ body {
     transform: translateY(1px);
 }
 
+/* Botão de escolher ficheiro CSV */
 input[type="file"]::file-selector-button {
-    background: rgba(255, 255, 255, 0.7);
-    color: #1d4ed8;
-    border: 1px solid rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.1);
+    color: #93c5fd;
+    border: 1px solid rgba(255, 255, 255, 0.2);
     padding: 8px 16px;
     border-radius: 8px;
     margin-right: 16px;
@@ -102,5 +113,6 @@ input[type="file"]::file-selector-button {
 }
 
 input[type="file"]::file-selector-button:hover {
-    background: #ffffff;
+    background: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
 }
