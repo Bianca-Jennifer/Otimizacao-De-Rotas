@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Otimização de Rotas - TSP</title>
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -26,7 +30,9 @@
         <div class="card shadow-sm p-4 mb-5">
             <form id="formularioUpload" class="row g-3">
                 
-                <h5 class="mt-2 fw-bold text-primary">Dados da Moto</h5>
+                <h5 class="mt-2 fw-bold text-primary">
+                    <i class="bi bi-bicycle me-2"></i>Dados da Moto
+                </h5>
                 <div class="col-md-4">
                     <label for="consumoMedio" class="form-label">Consumo Médio (km/L)</label>
                     <input type="number" step="0.1" class="form-control" id="consumoMedio" required>
@@ -42,7 +48,9 @@
 
                 <hr class="mt-4">
 
-                <h5 class="mt-2 fw-bold text-primary">Parâmetros do Algoritmo Genético</h5>
+                <h5 class="mt-2 fw-bold text-primary">
+                    <i class="bi bi-gear-fill me-2"></i>Parâmetros do Algoritmo Genético
+                </h5>
                 <div class="col-md-3">
                     <label for="formaSelecao" class="form-label">Forma de Seleção</label>
                     <select id="formaSelecao" class="form-select" required>
@@ -73,10 +81,12 @@
                     <input class="form-control" type="file" id="arquivoCSV" accept=".csv" required>
                 </div>
 
-                <div class="col-12 text-center">
-                    <button type="submit" id="botaoEnviar" class="btn btn-primary btn-lg px-5">
+                <div class="col-12 text-center mt-4">
+                    <button type="submit" id="botaoEnviar" class="btn btn-primary btn-lg px-5 shadow">
                         <span class="spinner-border spinner-border-sm d-none" id="indicadorCarregamento" role="status" aria-hidden="true"></span>
-                        <span id="textoBotao">Enviar Dados e Arquivo</span>
+                        <span id="textoBotao">
+                            <i class="bi bi-send-fill me-2"></i>Enviar Dados e Arquivo
+                        </span>
                     </button>
                 </div>
             </form>
