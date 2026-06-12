@@ -56,6 +56,7 @@ formularioUpload.addEventListener('submit', async function(evento) {
     botaoEnviar.disabled = true;
     indicadorCarregamento.classList.remove('d-none');
     textoBotao.textContent = 'Processando...';
+    blocoResultados.classList.add('d-none');
 
     const dadosDoFormulario = new FormData();
     
@@ -69,7 +70,25 @@ formularioUpload.addEventListener('submit', async function(evento) {
     dadosDoFormulario.append('arquivoCSV', arquivoCSV.files[0]);
 
     try {
-        await enviarDadosDaRota(dadosDoFormulario);
+        const respostaDaApi = await enviarDadosDaRota(dadosDoFormulario);
+        
+        if (respostaDaApi.distancia) {
+            resultadoDistancia.textContent = respostaDaApi.distancia + ' km';
+        }
+        
+        if (respostaDaApi.combustivel) {
+            resultadoCombustivel.textContent = respostaDaApi.combustivel + ' L';
+        }
+
+        if (respostaDaApi.rota_nomes && Array.isArray(respostaDaApi.rota_nomes)) {
+            listaCidades.innerHTML = respostaDaApi.rota_nomes.map((ponto, index) => 
+                `<li class="list-group-item bg-transparent text-white border-secondary border-opacity-25">${index + 1}. ${ponto}</li>`
+            ).join('');
+        }
+
+        blocoResultados.classList.remove('d-none');
+        blocoResultados.classList.add('fade-in');
+
     } catch (erro) {
         console.log(erro);
     } finally {
