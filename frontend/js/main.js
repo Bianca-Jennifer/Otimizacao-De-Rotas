@@ -12,6 +12,14 @@ const indicadorCarregamento = document.getElementById('indicadorCarregamento');
 const textoBotao = document.getElementById('textoBotao');
 const botaoEnviar = document.getElementById('botaoEnviar');
 
+const blocoResultados = document.getElementById('blocoResultados');
+const resultadoDistancia = document.getElementById('resultadoDistancia');
+const resultadoCombustivel = document.getElementById('resultadoCombustivel');
+const listaCidades = document.getElementById('listaCidades');
+
+let mapaInstancia = null;
+let grupoDeRotas = null;
+
 botaoComecar.addEventListener('click', () => {
     telaInicial.classList.add('fade-out');
     
@@ -41,6 +49,7 @@ botaoProsseguir.addEventListener('click', () => {
     }, 500);
 });
 
+//empacotamento de dados para enviar para API
 formularioUpload.addEventListener('submit', async function(evento) {
     evento.preventDefault();
 
