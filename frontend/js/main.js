@@ -1,7 +1,16 @@
-
 const telaInicial = document.getElementById('telaInicial');
 const telaConfiguracao = document.getElementById('telaConfiguracao');
 const botaoComecar = document.getElementById('botaoComecar');
+
+const passoArquivo = document.getElementById('passoArquivo');
+const passoDados = document.getElementById('passoDados');
+const botaoProsseguir = document.getElementById('botaoProsseguir');
+const arquivoCSV = document.getElementById('arquivoCSV');
+
+const formularioUpload = document.getElementById('formularioUpload');
+const indicadorCarregamento = document.getElementById('indicadorCarregamento');
+const textoBotao = document.getElementById('textoBotao');
+const botaoEnviar = document.getElementById('botaoEnviar');
 
 botaoComecar.addEventListener('click', () => {
     telaInicial.classList.add('fade-out');
@@ -15,10 +24,22 @@ botaoComecar.addEventListener('click', () => {
     }, 500);
 });
 
-const formularioUpload = document.getElementById('formularioUpload');
-const indicadorCarregamento = document.getElementById('indicadorCarregamento');
-const textoBotao = document.getElementById('textoBotao');
-const botaoEnviar = document.getElementById('botaoEnviar');
+botaoProsseguir.addEventListener('click', () => {
+    if (!arquivoCSV.value) {
+        alert('Por favor, selecione o arquivo CSV antes de prosseguir.');
+        return;
+    }
+
+    passoArquivo.classList.add('fade-out');
+    
+    setTimeout(() => {
+        passoArquivo.classList.add('d-none');
+        passoArquivo.classList.remove('fade-out');
+        
+        passoDados.classList.remove('d-none');
+        passoDados.classList.add('fade-in');
+    }, 500);
+});
 
 formularioUpload.addEventListener('submit', async function(evento) {
     evento.preventDefault();
@@ -36,7 +57,7 @@ formularioUpload.addEventListener('submit', async function(evento) {
     dadosDoFormulario.append('mutacao', document.getElementById('mutacao').value);
     dadosDoFormulario.append('tamanhoPopulacao', document.getElementById('tamanhoPopulacao').value);
     dadosDoFormulario.append('limiteGeracoes', document.getElementById('limiteGeracoes').value);
-    dadosDoFormulario.append('arquivoCSV', document.getElementById('arquivoCSV').files[0]);
+    dadosDoFormulario.append('arquivoCSV', arquivoCSV.files[0]);
 
     try {
         await enviarDadosDaRota(dadosDoFormulario);
@@ -45,6 +66,6 @@ formularioUpload.addEventListener('submit', async function(evento) {
     } finally {
         botaoEnviar.disabled = false;
         indicadorCarregamento.classList.add('d-none');
-        textoBotao.textContent = 'Enviar Dados e Arquivo';
+        textoBotao.innerHTML = '<i class="bi bi-send me-2"></i>Processar Rota';
     }
 });
