@@ -4,8 +4,15 @@ const telaConfiguracao = document.getElementById('telaConfiguracao');
 const botaoComecar = document.getElementById('botaoComecar');
 
 botaoComecar.addEventListener('click', () => {
-    telaInicial.classList.add('d-none');
-    telaConfiguracao.classList.remove('d-none');
+    telaInicial.classList.add('fade-out');
+    
+    setTimeout(() => {
+        telaInicial.classList.add('d-none');
+        telaInicial.classList.remove('fade-out');
+        
+        telaConfiguracao.classList.remove('d-none');
+        telaConfiguracao.classList.add('fade-in');
+    }, 500);
 });
 
 const formularioUpload = document.getElementById('formularioUpload');
