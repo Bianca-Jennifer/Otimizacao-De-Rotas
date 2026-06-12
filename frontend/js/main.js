@@ -69,56 +69,67 @@ formularioUpload.addEventListener('submit', async function(evento) {
     dadosDoFormulario.append('limiteGeracoes', document.getElementById('limiteGeracoes').value);
     dadosDoFormulario.append('arquivoCSV', arquivoCSV.files[0]);
 
-    try {
-        const respostaDaApi = await enviarDadosDaRota(dadosDoFormulario);
+try {
+        // Recebe o pacote GeoJSON (FeatureCollection) da API
+        const dadosGeoJson = await enviarDadosDaRota(dadosDoFormulario);
         
-        if (respostaDaApi.distancia) {
-            resultadoDistancia.textContent = respostaDaApi.distancia + ' km';
-        }
-        
-        if (respostaDaApi.combustivel) {
-            resultadoCombustivel.textContent = respostaDaApi.combustivel + ' L';
+        const rotaFeature = dadosGeoJson.features.find(f => f.geometry.type === 'LineString');
+        const pontosFeatures = dadosGeoJson.features.filter(f => f.geometry.type === 'Point');
+
+        // Calcular Distância e Consumo lendo as "properties" da linha
+        if (rotaFeature && rotaFeature.properties.distance_m) {
+            const distanciaKm = (rotaFeature.properties.distance_m / 1000).toFixed(2);
+            resultadoDistancia.textContent = distanciaKm + ' km';
+            
+            const consumoMedioInformado = parseFloat(document.getElementById('consumoMedio').value);
+            const combustivelGasto = (distanciaKm / consumoMedioInformado).toFixed(2);
+            resultadoCombustivel.textContent = combustivelGasto + ' L';
         }
 
-        if (respostaDaApi.rota_nomes && Array.isArray(respostaDaApi.rota_nomes)) {
-            listaCidades.innerHTML = respostaDaApi.rota_nomes.map((ponto, index) => 
-                `<li class="list-group-item bg-transparent text-white border-secondary border-opacity-25">${index + 1}. ${ponto}</li>`
+        // Montar a lista de paradas dinamicamente lendo os pontos
+        if (pontosFeatures.length > 0) {
+            listaCidades.innerHTML = pontosFeatures.map((ponto) => 
+                `<li class="list-group-item bg-transparent text-white border-secondary border-opacity-25">
+                    <strong>${ponto.properties.papel.toUpperCase()}:</strong> ${ponto.properties.name}
+                </li>`
             ).join('');
         }
 
         blocoResultados.classList.remove('d-none');
         blocoResultados.classList.add('fade-in');
 
+        // Renderizar o Mapa
         setTimeout(() => {
-            if (respostaDaApi.coordenadas && respostaDaApi.coordenadas.length > 0) {
-                if (!mapaInstancia) {
-                    mapaInstancia = L.map('mapaLeaflet').setView(respostaDaApi.coordenadas[0], 13);
-                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        attribution: '© OpenStreetMap'
-                    }).addTo(mapaInstancia);
-                } else {
-                    if (grupoDeRotas) {
-                        mapaInstancia.removeLayer(grupoDeRotas);
+            if (!mapaInstancia) {
+                mapaInstancia = L.map('mapaLeaflet').setView([-5.8, -35.2], 13);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '© OpenStreetMap'
+                }).addTo(mapaInstancia);
+            } else {
+                if (grupoDeRotas) {
+                    mapaInstancia.removeLayer(grupoDeRotas);
+                }
+            }
+
+            mapaInstancia.invalidateSize();
+
+            grupoDeRotas = L.geoJSON(dadosGeoJson, {
+
+                style: function (feature) {
+                    if (feature.geometry.type === 'LineString') {
+                        return { color: '#1f69f3', weight: 5, opacity: 0.8 };
+                    }
+                },
+
+                onEachFeature: function (feature, layer) {
+                    if (feature.geometry.type === 'Point') {
+                        layer.bindPopup(`<b>${feature.properties.papel.toUpperCase()}</b><br>${feature.properties.name}`);
                     }
                 }
+            }).addTo(mapaInstancia);
 
-                mapaInstancia.invalidateSize();
-
-                grupoDeRotas = L.featureGroup().addTo(mapaInstancia);
-                
-                L.polyline(respostaDaApi.coordenadas, {
-                    color: '#3b82f6', 
-                    weight: 5,
-                    opacity: 0.8
-                }).addTo(grupoDeRotas);
-
-                respostaDaApi.coordenadas.forEach((coordenada, indice) => {
-                    const nomeDoLocal = respostaDaApi.rota_nomes ? respostaDaApi.rota_nomes[indice] : (indice + 1).toString();
-                    L.marker(coordenada).addTo(grupoDeRotas).bindPopup(`<b>${indice + 1}º</b> - ${nomeDoLocal}`);
-                });
-
-                mapaInstancia.fitBounds(grupoDeRotas.getBounds(), {padding: [30, 30]});
-            }
+            mapaInstancia.fitBounds(grupoDeRotas.getBounds(), {padding: [30, 30]});
+            
         }, 300);
 
     } catch (erro) {
