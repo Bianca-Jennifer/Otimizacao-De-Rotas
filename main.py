@@ -1,24 +1,22 @@
 import uvicorn
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from typing import List
 
-from api.algoritmo_genetico.AlgoritmoGenetico import AlgoritmoGenetico
-from api.classes.individuo import Individuo
-from api.classes.definicao_problema import DefinicaoProblema
-from api.classes.veiculo import Veiculo
-from api.classes.lugar import Lugar
+from api.services.processar_service import processar
 
 app = FastAPI(
     title="API - Otimização de Rotas com Algoritmo Genético",
     description="Calcula a melhor rota considerando postos de combustível e limites do veículo."
 )
 
-class LugarInput(BaseModel):
-    nome: str
-    latitude: float
-    longitude: float
-    tipo: str
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class VeiculoInput(BaseModel):
     consumo_medio: float
@@ -36,46 +34,15 @@ class ExecutarAlgoritmoRequest(BaseModel):
     quantidade_elite: int = 1
     tamanho_torneio: int = 2
     
-    matriz_distancias: List[List[float]]
-    lugares: List[LugarInput]
     veiculo: VeiculoInput
-    
-    populacao_inicial: List[List[int]]
 
 @app.post("/algoritmo/executar", tags=["Algoritmo Genético"])
 def executar_algoritmo_completo(dados: ExecutarAlgoritmoRequest):
     try:
-        lugares_obj = [
-            Lugar(l.nome, l.latitude, l.longitude, l.tipo) 
-            for l in dados.lugares
-        ]
-        
-        veiculo_obj = Veiculo(
-            consumo_medio=dados.veiculo.consumo_medio,
-            capacidade_tanque=dados.veiculo.capacidade_tanque,
-            combustivel_atual=dados.veiculo.combustivel_atual,
-            tipo=dados.veiculo.tipo
-        )
-        
-        definicao = DefinicaoProblema(
-            lugares=lugares_obj,
-            matriz_distancias=dados.matriz_distancias,
-            veiculo=veiculo_obj
-        )
-        
-        populacao_obj = [
-            Individuo(rota_pontos_obrigatorios=rota, rota_completa=[], fitness=0.0) 
-            for rota in dados.populacao_inicial
-        ]
-        
-        ag = AlgoritmoGenetico(
-            limite_geracoes=dados.limite_geracoes,
-            tamanho_populacao=dados.tamanho_populacao,
-            definicao_problema=definicao
-        )
-        
+        ag, populacao_inicial = processar(dados)
+
         melhor_individuo = ag.executar_algoritmo(
-            populacao_inicial=populacao_obj,
+            populacao_inicial=populacao_inicial,
             tipo_selecao=dados.tipo_selecao,
             usar_mutacao=dados.usar_mutacao,
             taxa_mutacao=dados.taxa_mutacao,
