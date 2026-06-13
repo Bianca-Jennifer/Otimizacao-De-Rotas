@@ -116,7 +116,7 @@ class AlgoritmoGenetico:
 
         return individuo
     
-    def executar_algoritmo(self, populacao_inicial, tipo_selecao="torneio", usar_mutacao=True, taxa_mutacao=0.1, usar_elitismo=True, quantidade_elite=1, tamanho_torneio=3):
+    def executar_algoritmo(self, populacao_inicial, tipo_selecao="torneio", usar_mutacao=True, taxa_mutacao=0.5, usar_elitismo=True, quantidade_elite=1, tamanho_torneio=2):
         populacao_atual = []
 
         # =========================================
