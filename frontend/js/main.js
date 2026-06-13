@@ -70,35 +70,30 @@ formularioUpload.addEventListener('submit', async function(evento) {
     dadosDoFormulario.append('arquivoCSV', arquivoCSV.files[0]);
 
 try {
-        // Recebe o pacote GeoJSON (FeatureCollection) da API
-        const dadosGeoJson = await enviarDadosDaRota(dadosDoFormulario);
+        const respostaApi = await enviarDadosDaRota(dadosDoFormulario);
+        const dadosCalculados = respostaApi.resultado;
+
+        const distanciaEmKm = (dadosCalculados.distancia_total / 1000).toFixed(2);
+        resultadoDistancia.textContent = distanciaEmKm + ' km';
         
-        const rotaFeature = dadosGeoJson.features.find(f => f.geometry.type === 'LineString');
-        const pontosFeatures = dadosGeoJson.features.filter(f => f.geometry.type === 'Point');
+        const litrosConsumidos = dadosCalculados.litros_gastos.toFixed(2);
+        resultadoCombustivel.textContent = litrosConsumidos + ' L';
 
-        // Calcular Distância e Consumo lendo as "properties" da linha
-        if (rotaFeature && rotaFeature.properties.distance_m) {
-            const distanciaKm = (rotaFeature.properties.distance_m / 1000).toFixed(2);
-            resultadoDistancia.textContent = distanciaKm + ' km';
-            
-            const consumoMedioInformado = parseFloat(document.getElementById('consumoMedio').value);
-            const combustivelGasto = (distanciaKm / consumoMedioInformado).toFixed(2);
-            resultadoCombustivel.textContent = combustivelGasto + ' L';
-        }
+        if (dadosCalculados.ordem_de_visita_nomes && dadosCalculados.ordem_de_visita_nomes.length > 0) {
+            listaCidades.innerHTML = dadosCalculados.ordem_de_visita_nomes.map((local, indice) => {
+                let funcaoLocal = "PARADA";
+                if (indice === 0) funcaoLocal = "ORIGEM";
+                else if (indice === dadosCalculados.ordem_de_visita_nomes.length - 1) funcaoLocal = "DESTINO";
 
-        // Montar a lista de paradas dinamicamente lendo os pontos
-        if (pontosFeatures.length > 0) {
-            listaCidades.innerHTML = pontosFeatures.map((ponto) => 
-                `<li class="list-group-item bg-transparent text-white border-secondary border-opacity-25">
-                    <strong>${ponto.properties.papel.toUpperCase()}:</strong> ${ponto.properties.name}
-                </li>`
-            ).join('');
+                return `<li class="list-group-item bg-transparent text-white border-secondary border-opacity-25">
+                    <strong>${funcaoLocal}:</strong> ${local.nome}
+                </li>`;
+            }).join('');
         }
 
         blocoResultados.classList.remove('d-none');
         blocoResultados.classList.add('fade-in');
 
-        // Renderizar o Mapa
         setTimeout(() => {
             if (!mapaInstancia) {
                 mapaInstancia = L.map('mapaLeaflet').setView([-5.8, -35.2], 13);
@@ -113,14 +108,49 @@ try {
 
             mapaInstancia.invalidateSize();
 
-            grupoDeRotas = L.geoJSON(dadosGeoJson, {
+            const colecaoGeoJson = {
+                type: "FeatureCollection",
+                features: []
+            };
 
+            if (dadosCalculados.caminho_para_desenho) {
+                dadosCalculados.caminho_para_desenho.forEach(caminho => {
+                    colecaoGeoJson.features.push({
+                        type: "Feature",
+                        properties: { 
+                            nome: `${caminho.origem} para ${caminho.destino}` 
+                        },
+                        geometry: caminho.geometry
+                    });
+                });
+            }
+
+            if (dadosCalculados.ordem_de_visita_nomes) {
+                dadosCalculados.ordem_de_visita_nomes.forEach((local, indice) => {
+                    let funcaoDoPonto = "Parada";
+                    if (indice === 0) funcaoDoPonto = "Origem";
+                    else if (indice === dadosCalculados.ordem_de_visita_nomes.length - 1) funcaoDoPonto = "Destino";
+
+                    colecaoGeoJson.features.push({
+                        type: "Feature",
+                        properties: { 
+                            name: local.nome, 
+                            papel: funcaoDoPonto 
+                        },
+                        geometry: {
+                            type: "Point",
+                            coordinates: [local.longitude, local.latitude]
+                        }
+                    });
+                });
+            }
+
+            grupoDeRotas = L.geoJSON(colecaoGeoJson, {
                 style: function (feature) {
                     if (feature.geometry.type === 'LineString') {
                         return { color: '#1f69f3', weight: 5, opacity: 0.8 };
                     }
                 },
-
                 onEachFeature: function (feature, layer) {
                     if (feature.geometry.type === 'Point') {
                         layer.bindPopup(`<b>${feature.properties.papel.toUpperCase()}</b><br>${feature.properties.name}`);
