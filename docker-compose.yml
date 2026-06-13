@@ -1,0 +1,14 @@
+services:
+  osrm:
+    image: ghcr.io/project-osrm/osrm-backend
+    container_name: osrm-nordeste
+    command: >
+      osrm-routed --algorithm mld
+      --max-table-size 2000
+      --max-trip-size 2000
+      /data/nordeste-latest.osrm
+    volumes:
+      - ./osrm:/data
+    ports:
+      - "5000:5000"
+    restart: unless-stopped
