@@ -384,3 +384,9 @@ def criar_rota_com_postos3(definicao_problema, rota):
     return criar_rota_com_postos2(definicao_problema, rota_caixeiro_viajante)
 
 
+def criar_rota_com_postos_test(definicao_problema, rota):
+
+    rota_caixeiro_viajante = [0] + rota + [0]
+
+
+    return rota_caixeiro_viajante
