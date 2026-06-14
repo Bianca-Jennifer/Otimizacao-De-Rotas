@@ -1,6 +1,6 @@
 import requests
 import os
-import api.classes.lugar as Lugar
+
 from api.services.leitor_de_arquivo import ler_arquivo_de_lugares
 
 OSRM_URL = os.getenv("OSRM_URL", "http://10.0.0.119:5000")

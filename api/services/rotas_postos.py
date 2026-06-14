@@ -145,28 +145,21 @@ def criar_rota_com_postos2(definicao_problema, rota):
         origem = rota[i]
         destino = rota[i + 1]
 
-        print()
-        print("=====================================")
-        print(f"ORIGEM: {origem}")
-        print(f"DESTINO: {destino}")
-        print(f"COMBUSTÍVEL: {combustivel}")
-        print("=====================================")
 
 
         distancia_direta = (definicao_problema.matriz_distancias[origem][destino])
 
-        print(f"DISTÂNCIA DIRETA: {distancia_direta}")
+       
 
         # =====================================
         # CONSEGUE IR DIRETO
         # =====================================
 
         if distancia_direta <= combustivel:
-            print("CONSEGUE IR DIRETO")
+    
 
             combustivel -= distancia_direta
 
-            print(f"COMBUSTÍVEL RESTANTE: {combustivel}")
 
             rota_final.append(destino)
 
@@ -177,7 +170,7 @@ def criar_rota_com_postos2(definicao_problema, rota):
         # =====================================
         # TENTA INSERIR POSTO
         # =====================================
-        print("PRECISA DE POSTO")
+        
         melhor_posto = None
         menor_custo = float("inf")
 
@@ -221,7 +214,7 @@ def criar_rota_com_postos2(definicao_problema, rota):
         # =====================================
 
         if melhor_posto is not None:
-            print(f"POSTO ESCOLHIDO: {melhor_posto}")
+            
 
             combustivel -= (
                 definicao_problema
@@ -387,73 +380,13 @@ def criar_rota_com_postos3(definicao_problema, rota):
 
     rota_caixeiro_viajante = [0] + rota + [0]
 
-    print(rota_caixeiro_viajante)
 
     return criar_rota_com_postos2(definicao_problema, rota_caixeiro_viajante)
 
 
-lugares = [
+def criar_rota_com_postos_test(definicao_problema, rota):
 
-    Lugar(
-        "Depósito",
-        -7.23,
-        -35.88,
-        "Deposito"
-    ),
+    rota_caixeiro_viajante = [0] + rota + [0]
 
-    Lugar(
-        "Cliente A",
-        -7.24,
-        -35.89,
-        "Cliente"
-    ),
 
-    Lugar(
-        "Cliente B",
-        -7.25,
-        -35.90,
-        "Cliente"
-    ),
-
-    Lugar(
-        "Posto 1",
-        -7.26,
-        -35.91,
-        "Posto"
-    )
-]
-
-matriz_distancias = [
-
-    [0, 10, 40, 15],  # 0
-    [10, 0, 35, 10],  # 1
-    [40, 35, 0, 10],  # 2
-    [15, 5, 10, 0],  # 3 posto
-]
-
-veiculo = Veiculo(
-    consumo_medio=10,
-    capacidade_tanque=2,
-    combustivel_atual=2,
-    tipo="Carro"
-)
-
-definicao_problema = DefinicaoProblema(
-    lugares,
-    matriz_distancias,
-    veiculo
-)
-
-# =====================================
-# TESTE
-# =====================================
-rota = [2,1]
-
-resultado = criar_rota_com_postos3(
-    definicao_problema,
-    rota
-)
-
-print()
-print("RESULTADO:")
-print(resultado)    
+    return rota_caixeiro_viajante

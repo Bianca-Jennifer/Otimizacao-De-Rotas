@@ -9,4 +9,4 @@ class Veiculo:
         return self.consumo_medio * self.capacidade_tanque
     
     def obter_alcance_atual(self):
-        return (self.combustivel_atual * self.consumo_medio)
+        return self.combustivel_atual * self.consumo_medio
