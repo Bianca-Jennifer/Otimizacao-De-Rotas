@@ -73,6 +73,14 @@ try {
         const respostaApi = await enviarDadosDaRota(dadosDoFormulario);
         const dadosCalculados = respostaApi.resultado;
 
+        //condicional para o fitness
+        if (dadosCalculados.fitness === 999999) {
+
+            alert("Não foi possível encontrar uma rota válida! A distância entre os locais é muito grande para a quantidade de combustível na moto.");
+            blocoResultados.classList.add('d-none');
+            return; 
+        }
+
         const distanciaEmKm = (dadosCalculados.distancia_total / 1000).toFixed(2);
         resultadoDistancia.textContent = distanciaEmKm + ' km';
         
