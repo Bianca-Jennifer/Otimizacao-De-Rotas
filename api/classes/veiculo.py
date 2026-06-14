@@ -6,7 +6,7 @@ class Veiculo:
         self.tipo = tipo
 
     def obter_autonomia(self):
-        return (self.consumo_medio * self.capacidade_tanque) * 1000
+        return self.consumo_medio * self.capacidade_tanque
     
     def obter_alcance_atual(self):
-        return (self.combustivel_atual * self.consumo_medio) * 1000
+        return self.combustivel_atual * self.consumo_medio

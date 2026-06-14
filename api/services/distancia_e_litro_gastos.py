@@ -12,11 +12,16 @@ def calcular_distancia_total(individuo, problema):
 
     return total
 
-def calcular_litros_gastos(distancia_metros, problema):
+def calcular_litros_gastos(distancia_km, problema):
 
-    consumo = problema.veiculo.consumo_medio
+    consumo = problema.veiculo.consumo_medio  # km/L
 
-    distancia_km = distancia_metros / 1000
     litros = distancia_km / consumo
 
-    return litros    
+    return litros
+
+def converter_matriz_m_para_km(matriz):
+    return [
+        [valor / 1000 for valor in linha]
+        for linha in matriz
+    ]    

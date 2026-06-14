@@ -156,11 +156,10 @@ def criar_rota_com_postos2(definicao_problema, rota):
         # =====================================
 
         if distancia_direta <= combustivel:
-            print("CONSEGUE IR DIRETO")
+    
 
             combustivel -= distancia_direta
 
-            print(f"COMBUSTÍVEL RESTANTE: {combustivel}")
 
             rota_final.append(destino)
 
@@ -381,7 +380,6 @@ def criar_rota_com_postos3(definicao_problema, rota):
 
     rota_caixeiro_viajante = [0] + rota + [0]
 
-    print(rota_caixeiro_viajante)
 
     return criar_rota_com_postos2(definicao_problema, rota_caixeiro_viajante)
 
