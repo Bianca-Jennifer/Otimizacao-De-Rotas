@@ -91,7 +91,7 @@ try {
         const respostaApi = await enviarDadosDaRota(payload);
         const dadosCalculados = respostaApi.resultado;
 
-        const distanciaEmKm = (dadosCalculados.distancia_total / 1000).toFixed(2);
+        const distanciaEmKm = dadosCalculados.distancia_total.toFixed(2);
         resultadoDistancia.textContent = distanciaEmKm + ' km';
         
         const litrosConsumidos = dadosCalculados.litros_gastos.toFixed(2);
