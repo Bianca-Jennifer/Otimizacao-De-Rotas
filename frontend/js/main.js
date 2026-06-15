@@ -98,17 +98,13 @@ try {
         const litrosConsumidos = dadosCalculados.litros_gastos.toFixed(2);
         resultadoCombustivel.textContent = litrosConsumidos + ' L';
 
-        if (dadosCalculados.ordem_de_visita_nomes && dadosCalculados.ordem_de_visita_nomes.length > 0) {
-            listaCidades.innerHTML = dadosCalculados.ordem_de_visita_nomes.map((local, indice) => {
-                let funcaoLocal = "PARADA";
-                if (indice === 0) funcaoLocal = "ORIGEM";
-                else if (indice === dadosCalculados.ordem_de_visita_nomes.length - 1) funcaoLocal = "DESTINO";
-
-                return `<li class="list-group-item bg-transparent text-white border-secondary border-opacity-25">
-                    <strong>${funcaoLocal}:</strong> ${local.nome}
-                </li>`;
-            }).join('');
-        }
+            if (dadosCalculados.ordem_de_visita_nomes && dadosCalculados.ordem_de_visita_nomes.length > 0) {
+                listaCidades.innerHTML = dadosCalculados.ordem_de_visita_nomes.map((local) => {
+                    return `<li class="list-group-item bg-transparent text-white border-secondary border-opacity-25">
+                        <i class="bi bi-circle-fill me-2" style="font-size: 0.5rem; vertical-align: middle;"></i> ${local.nome}
+                    </li>`;
+                }).join('');
+            }
 
         blocoResultados.classList.remove('d-none');
         blocoResultados.classList.add('fade-in');
