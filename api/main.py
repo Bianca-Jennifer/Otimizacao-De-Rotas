@@ -1,8 +1,8 @@
 import uvicorn
 from fastapi import FastAPI, HTTPException
-from fastapi import Form, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from typing import List
 
 from api.services.auxiliar_no_desenho_da_rota_final import gerar_caminho_para_desenho
 from api.services.distancia_e_litro_gastos import calcular_distancia_total, calcular_litros_gastos
@@ -17,57 +17,33 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+class LugarInput(BaseModel):
+    nome: str
+    latitude: float
+    longitude: float
+    tipo: str
 
 class VeiculoInput(BaseModel):
     consumoMedio: float
     capacidadeTanque: float
     combustivelAtual: float
-    tipo: str = "moto"
 
 class ExecutarAlgoritmoRequest(BaseModel):
+    lugares: List[LugarInput]
     limiteGeracoes: int = 10
     tamanhoPopulacao: int = 4
     formaSelecao: str = "torneio"
     mutacao: bool = True
-
     veiculo: VeiculoInput
 
 @app.post("/algoritmo/executar", tags=["Algoritmo Genético"])
-def executar_algoritmo_completo(
-    limiteGeracoes: int = Form(...),
-    tamanhoPopulacao: int = Form(...),
-    formaSelecao: str = Form(...),
-    mutacao: bool = Form(...),
-
-    consumoMedio: float = Form(...),
-    capacidadeTanque: float = Form(...),
-    combustivelAtual: float = Form(...),
-
-    arquivoCSV: UploadFile = File(...)
-):
+def executar_algoritmo_completo(dados: ExecutarAlgoritmoRequest):
     try:
-        dados = ExecutarAlgoritmoRequest(
-            limiteGeracoes=limiteGeracoes,
-            tamanhoPopulacao=tamanhoPopulacao,
-            formaSelecao=formaSelecao,
-            mutacao=mutacao,
-
-            veiculo=VeiculoInput(
-                consumoMedio=consumoMedio,
-                capacidadeTanque=capacidadeTanque,
-                combustivelAtual=combustivelAtual
-            )
-        )
-
-        conteudo_csv = arquivoCSV.file.read().decode("utf-8")
-
-        print("Dados recebidos:", dados)
-
-        ag = processar(dados, conteudo_csv)
+        ag = processar(dados)
         print(ag.definicao_problema.matriz_distancias)
 
         populacao_inicial = gerar_populacao_inicial(ag.definicao_problema.lugares, ag.tamanho_populacao)
@@ -106,4 +82,4 @@ def executar_algoritmo_completo(
         raise HTTPException(status_code=500, detail=f"Erro durante a execução: {str(e)}")
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("api.main:app", host="0.0.0.0", port=8000, reload=True)

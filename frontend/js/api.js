@@ -19,12 +19,13 @@
 
 async function enviarDadosDaRota(dados) {
 
-    const urlDaApi = 'http://localhost:5000/processar_rota'; 
+    const urlDaApi = 'http://localhost:8000/algoritmo/executar';
 
     try {
         const resposta = await fetch(urlDaApi, {
             method: 'POST',
-            body: dados
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dados)
         });
 
         if (!resposta.ok) {
