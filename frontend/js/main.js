@@ -76,7 +76,7 @@ try {
         //condicional para o fitness
         if (dadosCalculados.fitness === 999999) {
 
-            alert("Não foi possível encontrar uma rota válida! A distância entre os locais é muito grande para a quantidade de combustível na moto.");
+            alert("Não foi possível encontrar uma rota válida!");
             blocoResultados.classList.add('d-none');
             return; 
         }
