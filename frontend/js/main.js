@@ -92,6 +92,12 @@ try {
         const respostaApi = await enviarDadosDaRota(payload);
         const dadosCalculados = respostaApi.resultado;
 
+            if (dadosCalculados.fitness === 999999) {
+                alert("Não foi possível encontrar uma rota válida!");
+                blocoResultados.classList.add('d-none');
+                return; 
+            }
+
         const distanciaEmKm = dadosCalculados.distancia_total.toFixed(2);
         resultadoDistancia.textContent = distanciaEmKm + ' km';
         
