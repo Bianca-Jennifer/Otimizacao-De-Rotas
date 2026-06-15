@@ -3,7 +3,7 @@ import os
 
 from api.services.leitor_de_arquivo import ler_arquivo_de_lugares
 
-OSRM_URL = os.getenv("OSRM_URL", "http://10.0.0.119:5000")
+OSRM_URL = os.getenv("OSRM_URL", "http://localhost:5000")
 
 
 def obter_distancia_entre_dois_pontos(lugar1, lugar2):
