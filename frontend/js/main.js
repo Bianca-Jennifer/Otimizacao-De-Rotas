@@ -70,6 +70,7 @@ formularioUpload.addEventListener('submit', async function(evento) {
     indicadorCarregamento.classList.remove('d-none');
     textoBotao.textContent = 'Processando...';
     blocoResultados.classList.add('d-none');
+    document.getElementById('alertaErro').classList.add('d-none');
 
     const conteudoCSV = await arquivoCSV.files[0].text();
     const lugares = parsearCSV(conteudoCSV);
@@ -182,6 +183,7 @@ try {
 
     } catch (erro) {
         console.log(erro);
+        document.getElementById('alertaErro').classList.remove('d-none');
     } finally {
         botaoEnviar.disabled = false;
         indicadorCarregamento.classList.add('d-none');
