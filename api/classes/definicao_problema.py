@@ -30,8 +30,8 @@ class DefinicaoProblema:
 
             rota.append({
                 "nome": lugar.nome,
-                "lat": lugar.latitude,
-                "long": lugar.longitude,
+                "latitude": lugar.latitude,
+                "longitude": lugar.longitude,
                 "tipo": lugar.tipo
             })
 

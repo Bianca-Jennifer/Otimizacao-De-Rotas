@@ -20,10 +20,10 @@ def processar(dados_frontend):
 
 
     veiculo = Veiculo(
-        consumo_medio =dados_veiculo.consumoMedio,
-        capacidade_tanque = dados_veiculo.capacidadeTanque,
-        combustivel_atual = dados_veiculo.combustivelAtual,
-        tipo = dados_veiculo.tipo
+        consumo_medio=dados_veiculo.consumoMedio,
+        capacidade_tanque=dados_veiculo.capacidadeTanque,
+        combustivel_atual=dados_veiculo.combustivelAtual,
+        tipo="moto"
     )
 
     definicao_problema = DefinicaoProblema(
