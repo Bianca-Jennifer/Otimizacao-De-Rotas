@@ -49,6 +49,19 @@ botaoProsseguir.addEventListener('click', () => {
     }, 500);
 });
 
+function parsearCSV(conteudo) {
+    const linhas = conteudo.trim().split('\n');
+    return linhas.slice(1).map(linha => {
+        const [nome, latitude, longitude, tipo] = linha.split(',');
+        return {
+            nome: nome.trim(),
+            latitude: parseFloat(latitude),
+            longitude: parseFloat(longitude),
+            tipo: tipo.trim()
+        };
+    });
+}
+
 //empacotamento de dados para enviar para API
 formularioUpload.addEventListener('submit', async function(evento) {
     evento.preventDefault();
@@ -58,19 +71,24 @@ formularioUpload.addEventListener('submit', async function(evento) {
     textoBotao.textContent = 'Processando...';
     blocoResultados.classList.add('d-none');
 
-    const dadosDoFormulario = new FormData();
-    
-    dadosDoFormulario.append('consumoMedio', document.getElementById('consumoMedio').value);
-    dadosDoFormulario.append('capacidadeTanque', document.getElementById('capacidadeTanque').value);
-    dadosDoFormulario.append('combustivelAtual', document.getElementById('combustivelAtual').value);
-    dadosDoFormulario.append('formaSelecao', document.getElementById('formaSelecao').value);
-    dadosDoFormulario.append('mutacao', document.getElementById('mutacao').value);
-    dadosDoFormulario.append('tamanhoPopulacao', document.getElementById('tamanhoPopulacao').value);
-    dadosDoFormulario.append('limiteGeracoes', document.getElementById('limiteGeracoes').value);
-    dadosDoFormulario.append('arquivoCSV', arquivoCSV.files[0]);
+    const conteudoCSV = await arquivoCSV.files[0].text();
+    const lugares = parsearCSV(conteudoCSV);
+
+    const payload = {
+        lugares,
+        veiculo: {
+            consumoMedio: parseFloat(document.getElementById('consumoMedio').value),
+            capacidadeTanque: parseFloat(document.getElementById('capacidadeTanque').value),
+            combustivelAtual: parseFloat(document.getElementById('combustivelAtual').value),
+        },
+        limiteGeracoes: parseInt(document.getElementById('limiteGeracoes').value),
+        tamanhoPopulacao: parseInt(document.getElementById('tamanhoPopulacao').value),
+        formaSelecao: document.getElementById('formaSelecao').value,
+        mutacao: document.getElementById('mutacao').value === 'sim',
+    };
 
 try {
-        const respostaApi = await enviarDadosDaRota(dadosDoFormulario);
+        const respostaApi = await enviarDadosDaRota(payload);
         const dadosCalculados = respostaApi.resultado;
 
         const distanciaEmKm = (dadosCalculados.distancia_total / 1000).toFixed(2);
