@@ -39,3 +39,10 @@ services:
       osrm:
         condition: service_healthy
     restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    container_name: frontend-rotas
+    ports:
+      - "${FRONTEND_PORT:-80}:80"
+    restart: unless-stopped
