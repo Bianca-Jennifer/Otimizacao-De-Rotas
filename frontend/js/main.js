@@ -147,16 +147,11 @@ try {
             }
 
             if (dadosCalculados.ordem_de_visita_nomes) {
-                dadosCalculados.ordem_de_visita_nomes.forEach((local, indice) => {
-                    let funcaoDoPonto = "Parada";
-                    if (indice === 0) funcaoDoPonto = "Origem";
-                    else if (indice === dadosCalculados.ordem_de_visita_nomes.length - 1) funcaoDoPonto = "Destino";
-
+                dadosCalculados.ordem_de_visita_nomes.forEach((local) => {
                     colecaoGeoJson.features.push({
                         type: "Feature",
-                        properties: { 
-                            name: local.nome, 
-                            papel: funcaoDoPonto 
+                        properties: {
+                            name: local.nome
                         },
                         geometry: {
                             type: "Point",
@@ -174,7 +169,7 @@ try {
                 },
                 onEachFeature: function (feature, layer) {
                     if (feature.geometry.type === 'Point') {
-                        layer.bindPopup(`<b>${feature.properties.papel.toUpperCase()}</b><br>${feature.properties.name}`);
+                        layer.bindPopup(`<b>${feature.properties.name}</b>`);
                     }
                 }
             }).addTo(mapaInstancia);
